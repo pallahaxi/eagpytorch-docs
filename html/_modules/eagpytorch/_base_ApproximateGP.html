@@ -1,0 +1,726 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eagpytorch._base_ApproximateGP &mdash; eaGPyTorch  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> eaGPyTorch
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../eagpytorch.html">eagpytorch package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">eaGPyTorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>eagpytorch._base_ApproximateGP</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for eagpytorch._base_ApproximateGP</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ApproximateGPModel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RunApproximateGP&quot;</span>
+<span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">seed</span>
+
+<span class="kn">from</span> <span class="nn">gpytorch.distributions</span> <span class="kn">import</span> <span class="n">MultivariateNormal</span>
+<span class="kn">from</span> <span class="nn">gpytorch.means</span> <span class="kn">import</span> <span class="n">ConstantMean</span>
+<span class="kn">from</span> <span class="nn">gpytorch.mlls</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GammaRobustVariationalELBO</span><span class="p">,</span>
+    <span class="n">PredictiveLogLikelihood</span><span class="p">,</span>
+    <span class="n">VariationalELBO</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">gpytorch.models</span> <span class="kn">import</span> <span class="n">ApproximateGP</span>
+<span class="kn">from</span> <span class="nn">gpytorch.variational</span> <span class="kn">import</span> <span class="n">CholeskyVariationalDistribution</span>
+<span class="kn">from</span> <span class="nn">gpytorch.variational</span> <span class="kn">import</span> <span class="n">VariationalStrategy</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">seed</span> <span class="k">as</span> <span class="n">nseed</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">mean</span><span class="p">,</span>
+    <span class="n">ndarray</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">manual_seed</span><span class="p">,</span>
+    <span class="n">no_grad</span><span class="p">,</span>
+    <span class="n">randperm</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Adadelta</span><span class="p">,</span>
+    <span class="n">Adagrad</span><span class="p">,</span>
+    <span class="n">Adam</span><span class="p">,</span>
+    <span class="n">RMSprop</span><span class="p">,</span>
+    <span class="n">SGD</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">._const</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="c1"># likelihoods</span>
+    <span class="n">bernoullilikelihood</span><span class="p">,</span>
+    <span class="n">gaussianlikelihood</span><span class="p">,</span>
+    <span class="n">poissonlikelihood</span><span class="p">,</span>
+    <span class="c1"># mlls</span>
+    <span class="n">gammarobustvariationalelbo</span><span class="p">,</span>
+    <span class="n">predictiveloglikelihood</span><span class="p">,</span>
+    <span class="n">variationalelbo</span><span class="p">,</span>
+    <span class="c1"># optimizers</span>
+    <span class="n">adadelta</span><span class="p">,</span>
+    <span class="n">adagrad</span><span class="p">,</span>
+    <span class="n">adam</span><span class="p">,</span>
+    <span class="n">rmsprop</span><span class="p">,</span>
+    <span class="n">sgd</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">._likelihoods</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PoissonLikelihood</span><span class="p">,</span>
+    <span class="n">GaussianLikelihood</span><span class="p">,</span>
+    <span class="n">BernoulliLikelihood</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">array_to_tensor</span><span class="p">,</span>
+    <span class="n">check_device</span><span class="p">,</span>
+    <span class="n">load_model</span><span class="p">,</span>
+    <span class="n">plot_kernel</span><span class="p">,</span>
+    <span class="n">save_model</span><span class="p">,</span>
+    <span class="n">set_kernel</span><span class="p">,</span>
+    <span class="n">_predict_obj</span><span class="p">,</span>
+    <span class="n">_sample_f</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="ApproximateGPModel"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.ApproximateGPModel">[docs]</a><span class="k">class</span> <span class="nc">ApproximateGPModel</span><span class="p">(</span><span class="n">ApproximateGP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;ApproximateGP用のモデル定義クラス</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inducing_points : torch.tensor</span>
+<span class="sd">        補助変数の座標</span>
+
+<span class="sd">        `learn_inducing_locations=True` である以上、ここで指定する補助変数は更新される</span>
+<span class="sd">    ex_var_dim : int</span>
+<span class="sd">        説明変数の個数</span>
+
+<span class="sd">        `ex_var_dim=None` を指定すると計算は速くなるものの、説明変数間の重みの縮退はとけない。</span>
+<span class="sd">    kernel : str or :obj:`gpytorch.kernels`</span>
+<span class="sd">        使用するカーネル関数を指定する</span>
+
+<span class="sd">        基本はstrで指定されることを想定しているものの、自作のカーネル関数を入力することも可能</span>
+<span class="sd">    **ker_conf : dict</span>
+<span class="sd">        カーネル関数に渡す設定</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inducing_points</span><span class="p">,</span> <span class="n">ex_var_dim</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="o">**</span><span class="n">ker_conf</span><span class="p">):</span>
+        <span class="n">variational_distribution</span> <span class="o">=</span> <span class="n">CholeskyVariationalDistribution</span><span class="p">(</span>
+            <span class="n">inducing_points</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">variational_strategy</span> <span class="o">=</span> <span class="n">VariationalStrategy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">inducing_points</span><span class="p">,</span>
+            <span class="n">variational_distribution</span><span class="p">,</span>
+            <span class="n">learn_inducing_locations</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ApproximateGPModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">variational_strategy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_module</span> <span class="o">=</span> <span class="n">ConstantMean</span><span class="p">()</span>
+        <span class="n">_ker_conf</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ard_num_dims&#39;</span><span class="p">:</span> <span class="n">ex_var_dim</span><span class="p">}</span>
+        <span class="n">_ker_conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ker_conf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covar_module</span> <span class="o">=</span> <span class="n">set_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="o">**</span><span class="n">_ker_conf</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApproximateGPModel.forward"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.ApproximateGPModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;ApproximateGPModelのforwardメソッド</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mean_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">covar_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">covar_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mean_x</span><span class="p">,</span> <span class="n">covar_x</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RunApproximateGP"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP">[docs]</a><span class="k">class</span> <span class="nc">RunApproximateGP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;ApproximateGPModelの実行クラス</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inducing_points_num : int or float</span>
+<span class="sd">        補助変数の個数(int)</span>
+
+<span class="sd">        もし 0 &lt; inducing_points_num &lt; 1 が渡された場合、学習用データの len と</span>
+<span class="sd">        inducing_points_num の積が補助変数の個数として設定される</span>
+<span class="sd">    kernel : str or :obj:`gpytorch.kernels`, default :obj:`&#39;RBFKernel&#39;`</span>
+<span class="sd">        使用するカーネル関数を指定する。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;CosineKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;LinearKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;MaternKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;PeriodicKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;RBFKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;RQKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;SpectralMixtureKernel&#39;`</span>
+
+<span class="sd">        基本はstrで指定されることを想定しているものの、 :obj:`gpytorch.kernels`</span>
+<span class="sd">        を用いた自作のカーネル関数を入力することも可能</span>
+<span class="sd">    likelihood : str, default :obj:`&#39;GaussianLikelihood&#39;`</span>
+<span class="sd">        likelihoodとして使用するクラス名が指定される。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;GaussianLikelihood&#39;`, :obj:`&#39;GL&#39;` : likelihoodにガウス分布を仮定したガウス過程を行う場合</span>
+<span class="sd">        - :obj:`&#39;PoissonLikelihood&#39;`, :obj:`&#39;PL&#39;` : likelihoodにポアソン分布を仮定したポアソン回帰ガウス過程モデルを行う場合</span>
+<span class="sd">        - :obj:`&#39;BernoulliLikelihood&#39;` : likelihoodにベルヌーイ分布を仮定した二値分類ガウス過程モデルを行う場合</span>
+
+<span class="sd">    optimizer : str, default :obj:`&#39;Adam&#39;`</span>
+<span class="sd">        optimizerとして使用するクラス名が指定される。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;Adam&#39;`</span>
+<span class="sd">        - :obj:`&#39;sgd&#39;`</span>
+<span class="sd">        - :obj:`&#39;RMSprop&#39;`</span>
+<span class="sd">        - :obj:`&#39;Adadelta&#39;`</span>
+<span class="sd">        - :obj:`&#39;Adagrad&#39;`</span>
+
+<span class="sd">    mll : str, default :obj:`&#39;VariationalELBO&#39;`</span>
+<span class="sd">        確率分布の周辺化の方法のクラス名が指定される。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;VariationalELBO&#39;`, :obj:`&#39;VELBO&#39;`</span>
+<span class="sd">        - :obj:`&#39;PredictiveLogLikelihood&#39;`, :obj:`&#39;PLL&#39;`</span>
+<span class="sd">        - :obj:`&#39;GammaRobustVariationalELBO&#39;`, :obj:`&#39;GRVELBO&#39;`</span>
+
+<span class="sd">    ard_option : bool, default True</span>
+<span class="sd">        ARDカーネルを利用するかが指定される</span>
+
+<span class="sd">        もし :obj:`kernel_coeff` を利用する場合 `ard_option=True` を選択する</span>
+<span class="sd">    ker_conf : dict, default dict()</span>
+<span class="sd">        カーネル関数に渡す設定</span>
+<span class="sd">    mll_conf : dict, default dict()</span>
+<span class="sd">        mllに渡す設定</span>
+<span class="sd">    opt_conf : dict, default dict()</span>
+<span class="sd">        optimizerに渡す設定</span>
+<span class="sd">    random_state : int, default None</span>
+<span class="sd">        seedの固定</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">inducing_points_num</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                 <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;RBFKernel&#39;</span><span class="p">,</span>
+                 <span class="n">likelihood</span><span class="o">=</span><span class="s1">&#39;GaussianLikelihood&#39;</span><span class="p">,</span>
+                 <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;Adam&#39;</span><span class="p">,</span>
+                 <span class="n">mll</span><span class="o">=</span><span class="s1">&#39;VariationalELBO&#39;</span><span class="p">,</span>
+                 <span class="n">ard_option</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">ker_conf</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                 <span class="n">mll_conf</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                 <span class="n">opt_conf</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+            <span class="n">nseed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+            <span class="n">manual_seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">check_device</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span> <span class="o">=</span> <span class="n">inducing_points_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span> <span class="o">=</span> <span class="n">kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span> <span class="o">=</span> <span class="n">likelihood</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mll</span> <span class="o">=</span> <span class="n">mll</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ard_option</span> <span class="o">=</span> <span class="n">ard_option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 空のmodelを作成しないとloadできない</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mll</span> <span class="o">=</span> <span class="kc">None</span>    <span class="c1"># 空のmodelを作成しないとloadできない</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 空のmodelを作成しないとloadできない</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ker_conf</span> <span class="o">=</span> <span class="n">ker_conf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mll_conf</span> <span class="o">=</span> <span class="n">mll_conf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opt_conf</span> <span class="o">=</span> <span class="n">opt_conf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_set_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;likelihoodとしてself._likelihoodの指示の元、インスタンスを立てるメソッド</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span> <span class="ow">in</span> <span class="n">gaussianlikelihood</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">GaussianLikelihood</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span> <span class="ow">in</span> <span class="n">poissonlikelihood</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PoissonLikelihood</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span> <span class="ow">in</span> <span class="n">bernoullilikelihood</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BernoulliLikelihood</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;likelihood=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span><span class="si">}</span><span class="s1">は用意されていません&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_mll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_data</span><span class="p">,</span> <span class="n">mll_conf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;mllとしてself._mllの指示の元、インスタンスを立てるメソッド</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># mllのインスタンスを立てる</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mll</span> <span class="ow">in</span> <span class="n">variationalelbo</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">VariationalELBO</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">num_data</span><span class="o">=</span><span class="n">num_data</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">mll_conf</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mll</span> <span class="ow">in</span> <span class="n">predictiveloglikelihood</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PredictiveLogLikelihood</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">num_data</span><span class="o">=</span><span class="n">num_data</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">mll_conf</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mll</span> <span class="ow">in</span> <span class="n">gammarobustvariationalelbo</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">GammaRobustVariationalELBO</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">num_data</span><span class="o">=</span><span class="n">num_data</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">mll_conf</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mll=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_mll</span><span class="si">}</span><span class="s1">は用意されていません&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_optimizer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">opt_conf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;optimizerとしてself._optimizerの指示の元、インスタンスを立てるメソッド</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="ow">in</span> <span class="n">adam</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Adam</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()},</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span>
+            <span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_conf</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="ow">in</span> <span class="n">sgd</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SGD</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()},</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span>
+            <span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_conf</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="ow">in</span> <span class="n">rmsprop</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RMSprop</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()},</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span>
+            <span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_conf</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="ow">in</span> <span class="n">adadelta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Adadelta</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()},</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span>
+            <span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_conf</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="ow">in</span> <span class="n">adagrad</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Adagrad</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()},</span>
+                <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">parameters</span><span class="p">()}</span>
+            <span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">opt_conf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;optimizer=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span><span class="si">}</span><span class="s1">は用意されていません&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RunApproximateGP.set_model"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.set_model">[docs]</a>    <span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">train_x</span><span class="p">,</span>
+                  <span class="n">train_y</span><span class="p">,</span>
+                  <span class="o">*</span><span class="p">,</span>
+                  <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+                  <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+                  <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;使用するモデルのインスタンスを立てるメソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_x : np.array or torch.tensor</span>
+<span class="sd">            学習用データセットの説明変数</span>
+<span class="sd">        train_y : np.array or torch.tensor</span>
+<span class="sd">            学習用データセットの目的変数</span>
+<span class="sd">        lr : float</span>
+<span class="sd">            学習率</span>
+<span class="sd">        batch_size : int, default 128</span>
+<span class="sd">            ミニバッチでのデータ数</span>
+<span class="sd">        shuffle : bool, default True</span>
+<span class="sd">            学習データをシャッフルしてミニバッチ学習させるかを設定</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span> <span class="o">==</span> <span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">train_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">array_to_tensor</span><span class="p">(</span><span class="n">train_x</span><span class="p">),)</span>
+            <span class="n">train_x</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tri</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">tri</span><span class="o">.</span><span class="n">ndimension</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">tri</span> <span class="k">for</span> <span class="n">tri</span> <span class="ow">in</span> <span class="n">train_x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">train_y</span><span class="p">)</span> <span class="o">==</span> <span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">train_y</span> <span class="o">=</span> <span class="n">array_to_tensor</span><span class="p">(</span><span class="n">train_y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">inducing_points_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span><span class="p">)</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">randperm</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))[:</span><span class="n">inducing_points_len</span><span class="p">]</span>
+            <span class="n">inducing_points</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">inducing_points_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points_num</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">randperm</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))[:</span><span class="n">inducing_points_len</span><span class="p">]</span>
+            <span class="n">inducing_points</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;inducing_points_numに正しい値が入力されていません&#39;</span><span class="p">)</span>
+        <span class="n">ard_option</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ard_option</span>
+        <span class="n">ex_var_dim</span> <span class="o">=</span> <span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span>
+                                       <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                                       <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">)</span>
+
+        <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span>
+        <span class="n">ker_conf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ker_conf</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="o">==</span> <span class="s1">&#39;SpectralMixtureKernel&#39;</span><span class="p">:</span>
+            <span class="c1"># SpectralMixtureKernelは必ずnum_mixturesと(ミニバッチ学習の場合)batch_sizeが必要となる</span>
+            <span class="n">ker_conf</span><span class="p">[</span><span class="s1">&#39;num_mixtures&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ker_conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;num_mixtures&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="n">ker_conf</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="n">batch_size</span><span class="p">})</span>
+        <span class="c1"># ここで上記モデルのインスタンスを立てる</span>
+        <span class="k">if</span> <span class="n">ard_option</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">ApproximateGPModel</span><span class="p">(</span>
+                <span class="n">inducing_points</span><span class="p">,</span>
+                <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+                <span class="n">ex_var_dim</span><span class="o">=</span><span class="n">ex_var_dim</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">ker_conf</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">ApproximateGPModel</span><span class="p">(</span>
+                <span class="n">inducing_points</span><span class="p">,</span>
+                <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+                <span class="n">ex_var_dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">ker_conf</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># likelihoodのインスタンスを立てる</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_likelihood</span><span class="p">()</span>
+
+        <span class="c1"># mllのインスタンスを立てる</span>
+        <span class="n">num_data</span> <span class="o">=</span> <span class="n">train_y</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_mll</span><span class="p">(</span><span class="n">num_data</span><span class="p">,</span> <span class="n">mll_conf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mll_conf</span><span class="p">)</span>
+
+        <span class="c1"># optimizerのインスタンスを立てる</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_optimizer</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">opt_conf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_opt_conf</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.fit"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">test_dataloader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;学習用メソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        epochs : int</span>
+<span class="sd">            エポック数</span>
+<span class="sd">        test_dataloader : :obj:`torch.utils.data.DataLoader`, default None</span>
+<span class="sd">            テストデータをまとめたデータローダー</span>
+
+<span class="sd">            もし test_dataloader を設定している場合エポックごとにテストデータに対するlossも表示されるように設定される</span>
+<span class="sd">        verbose : bool, default True</span>
+<span class="sd">            表示形式</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">train_dataloader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+            <span class="n">train_loss</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">test_loss</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="ow">in</span> <span class="n">train_dataloader</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mll</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">)</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                <span class="n">train_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">test_dataloader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="ow">in</span> <span class="n">test_dataloader</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">no_grad</span><span class="p">():</span>
+                        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+                        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mll</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">)</span>
+                        <span class="n">test_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+            <span class="n">is_display_timing</span> <span class="o">=</span> <span class="n">epoch</span> <span class="o">%</span> <span class="p">(</span><span class="n">epochs</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">epochs</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">is_display_timing</span> <span class="ow">or</span> <span class="n">epoch</span> <span class="o">==</span> <span class="n">epochs</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">test_loss</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s1">&#39;</span>
+                          <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; - Train Loss: </span><span class="si">{</span><span class="n">mean</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> /&#39;</span>
+                          <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; Test Loss: </span><span class="si">{</span><span class="n">mean</span><span class="p">(</span><span class="n">test_loss</span><span class="p">)</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s1">&#39;</span>
+                          <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39; - Train Loss: </span><span class="si">{</span><span class="n">mean</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># TODO: 追加学習のために再学習の際、self.epochを利用する形にする</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.predict"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cl</span><span class="o">=</span><span class="mf">0.6827</span><span class="p">,</span> <span class="n">sample_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sample_f_num</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;予測用メソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : np.array or torch.tensor</span>
+<span class="sd">            入力説明変数</span>
+<span class="sd">        cl : float default 0.6827(1sigma)</span>
+<span class="sd">            信頼区間</span>
+<span class="sd">        sample_num : int default None</span>
+<span class="sd">            yのサンプル数</span>
+<span class="sd">        sample_f_num : int default None</span>
+<span class="sd">            fのサンプル数</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output : object</span>
+<span class="sd">            予測された目的変数のオブジェクト。下記の属性が用意されている。</span>
+
+<span class="sd">            - output.mean : 予測された目的変数の平均値</span>
+<span class="sd">            - output.upper : 予測された目的変数の信頼区間の上限</span>
+<span class="sd">            - output.lower : 予測された目的変数の信頼区間の下限</span>
+<span class="sd">            - output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</span>
+<span class="sd">            - output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</span>
+<span class="sd">            - output.probs : BernoulliLikelihood を指定した際に、2値分類の予測確率。このとき mean,upper,lower は output に追加されない。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">==</span> <span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">array_to_tensor</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mf">0.5</span> <span class="o">&lt;</span> <span class="n">cl</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cl=</span><span class="si">{</span><span class="n">cl</span><span class="si">}</span><span class="s1">が正しい値ではありません&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">predicts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_likelihood</span> <span class="ow">in</span> <span class="n">gaussianlikelihood</span><span class="p">:</span>
+                <span class="n">predicts_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">predicts_f</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">_predict_obj</span><span class="p">(</span><span class="n">predicts</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">sample_num</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">samples_f</span> <span class="o">=</span> <span class="n">_sample_f</span><span class="p">(</span><span class="n">predicts_f</span><span class="p">,</span> <span class="n">sample_f_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.save"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;モデルのsaveメソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            モデルの保存先のパスとファイル名</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">epoch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">mll</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mll</span><span class="p">,</span>
+            <span class="n">optimizer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span>
+        <span class="p">)</span>
+        <span class="n">save_model</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.load"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;モデルのloadメソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            モデルの保存先のパスとファイル名</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">epoch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">likelihood</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+            <span class="n">mll</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mll</span><span class="p">,</span>
+            <span class="n">optimizer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
+            <span class="n">loss</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span>
+        <span class="p">)</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">likelihood</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">mll</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.kernel_coeff"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.kernel_coeff">[docs]</a>    <span class="k">def</span> <span class="nf">kernel_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;kernelの係数を出力するメソッド</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output_dict : dict</span>
+<span class="sd">            カーネル関数の係数</span>
+
+<span class="sd">            `ard_option=True` の場合、 $\Theta$ が各々の説明変数ごとに重みを変えて更新され、出力される</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        --------</span>
+<span class="sd">        RBFKernelの場合、各説明変数の重要度 $\eta$ は出力される `&#39;base_kernel.raw_lengthscale&#39;`</span>
+<span class="sd">        の逆数の2乗に対応する</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: kernel関数をスイッチさせ、それに応じてわかりやすい形に変形する</span>
+        <span class="n">output_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">covar_module</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">output_dict</span></div>
+
+<div class="viewcode-block" id="RunApproximateGP.plot_kernel"><a class="viewcode-back" href="../../eagpytorch.html#eagpytorch.RunApproximateGP.plot_kernel">[docs]</a>    <span class="k">def</span> <span class="nf">plot_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;カーネル関数のプロット</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kernel : str or :obj:`gpytorch.kernels`, default None</span>
+<span class="sd">            使用するカーネル関数を指定する</span>
+
+<span class="sd">        plot_range : tuple, default None</span>
+<span class="sd">            プロットする幅</span>
+
+<span class="sd">        **kwargs : dict</span>
+<span class="sd">            カーネル関数に渡す設定</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">temp_kernel</span> <span class="o">=</span> <span class="n">set_kernel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_ker_conf</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp_kernel</span> <span class="o">=</span> <span class="n">set_kernel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">temp_kernel</span> <span class="o">=</span> <span class="n">set_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_ker_conf</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">temp_kernel</span> <span class="o">=</span> <span class="n">set_kernel</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">plot_kernel</span><span class="p">(</span><span class="n">temp_kernel</span><span class="p">,</span> <span class="n">plot_range</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Hirotaka Kato, Naofumi Emoto and Yuya Kaneta
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

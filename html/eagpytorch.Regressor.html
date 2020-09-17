@@ -1,0 +1,572 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eagpytorch.Regressor package &mdash; eaGPyTorch  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="eagpytorch.Classifier package" href="eagpytorch.Classifier.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> eaGPyTorch
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="eagpytorch.html">eagpytorch package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="eagpytorch.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="eagpytorch.Classifier.html">eagpytorch.Classifier package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">eagpytorch.Regressor package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-eagpytorch.Regressor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="eagpytorch.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eagpytorch.html#module-eagpytorch.utils">eagpytorch.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eagpytorch.html#module-eagpytorch">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">eaGPyTorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="eagpytorch.html">eagpytorch package</a> &raquo;</li>
+        
+      <li>eagpytorch.Regressor package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/eagpytorch.Regressor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="eagpytorch-regressor-package">
+<h1>eagpytorch.Regressor package<a class="headerlink" href="#eagpytorch-regressor-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-eagpytorch.Regressor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-eagpytorch.Regressor" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="eagpytorch.Regressor.Approximate">
+<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Regressor.</code><code class="sig-name descname">Approximate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">eagpytorch._base_ApproximateGP.RunApproximateGP</span></code></p>
+<p>ApproximateGPModelの実行クラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inducing_points_num</strong> (<em>int</em><em> or </em><em>float</em>) – <p>補助変数の個数(int)</p>
+<p>もし 0 &lt; inducing_points_num &lt; 1 が渡された場合、学習用データの len と
+inducing_points_num の積が補助変数の個数として設定される</p>
+</p></li>
+<li><p><strong>kernel</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'RBFKernel'</span></code>) – <p>使用するカーネル関数を指定する。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'CosineKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'LinearKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'MaternKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'PeriodicKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RBFKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RQKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'SpectralMixtureKernel'</span></code></p></li>
+</ul>
+<p>基本はstrで指定されることを想定しているものの、 <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>
+を用いた自作のカーネル関数を入力することも可能</p>
+</p></li>
+<li><p><strong>likelihood</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>) – <p>likelihoodとして使用するクラス名が指定される。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GL'</span></code> : likelihoodにガウス分布を仮定したガウス過程を行う場合</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'PoissonLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'PL'</span></code> : likelihoodにポアソン分布を仮定したポアソン回帰ガウス過程モデルを行う場合</p></li>
+</ul>
+</p></li>
+<li><p><strong>optimizer</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code>) – <p>optimizerとして使用するクラス名が指定される。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'sgd'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RMSprop'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adadelta'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adagrad'</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>mll</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'VariationalELBO'</span></code>) – <p>確率分布の周辺化の方法のクラス名が指定される。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'VariationalELBO'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'VELBO'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'PredictiveLogLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'PLL'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'GammaRobustVariationalELBO'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GRVELBO'</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>ard_option</strong> (<em>bool</em><em>, </em><em>default True</em>) – <p>ARDカーネルを利用するかが指定される</p>
+<p>もし <a class="reference internal" href="#eagpytorch.Regressor.Approximate.kernel_coeff" title="eagpytorch.Regressor.Approximate.kernel_coeff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kernel_coeff</span></code></a> を利用する場合 <cite>ard_option=True</cite> を選択する</p>
+</p></li>
+<li><p><strong>ker_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – カーネル関数に渡す設定</p></li>
+<li><p><strong>mll_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – mllに渡す設定</p></li>
+<li><p><strong>opt_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – optimizerに渡す設定</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>default None</em>) – seedの固定</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>学習用メソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>int</em>) – エポック数</p></li>
+<li><p><strong>test_dataloader</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code>, default None) – <p>テストデータをまとめたデータローダー</p>
+<p>もし test_dataloader を設定している場合エポックごとにテストデータに対するlossも表示されるように設定される</p>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>default True</em>) – 表示形式</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.kernel_coeff">
+<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.kernel_coeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>kernelの係数を出力するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><strong>output_dict</strong> – カーネル関数の係数</p>
+<p><cite>ard_option=True</cite> の場合、 $Theta$ が各々の説明変数ごとに重みを変えて更新され、出力される</p>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>RBFKernelの場合、各説明変数の重要度 $eta$ は出力される <cite>‘base_kernel.raw_lengthscale’</cite>
+の逆数の2乗に対応する</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>モデルのloadメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – モデルの保存先のパスとファイル名</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.plot_kernel">
+<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.plot_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>カーネル関数のプロット</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>, default None) – 使用するカーネル関数を指定する</p></li>
+<li><p><strong>plot_range</strong> (<em>tuple</em><em>, </em><em>default None</em>) – プロットする幅</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – カーネル関数に渡す設定</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>予測用メソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 入力説明変数</p></li>
+<li><p><strong>cl</strong> (<em>float default 0.6827</em><em>(</em><em>1sigma</em><em>)</em>) – 信頼区間</p></li>
+<li><p><strong>sample_num</strong> (<em>int default None</em>) – yのサンプル数</p></li>
+<li><p><strong>sample_f_num</strong> (<em>int default None</em>) – fのサンプル数</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
+<ul class="simple">
+<li><p>output.mean : 予測された目的変数の平均値</p></li>
+<li><p>output.upper : 予測された目的変数の信頼区間の上限</p></li>
+<li><p>output.lower : 予測された目的変数の信頼区間の下限</p></li>
+<li><p>output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</p></li>
+<li><p>output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>モデルのsaveメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – モデルの保存先のパスとファイル名</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Approximate.set_model">
+<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Approximate.html#Approximate.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Approximate.set_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>使用するモデルのインスタンスを立てるメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 学習用データセットの説明変数</p></li>
+<li><p><strong>train_y</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 学習用データセットの目的変数</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – 学習率</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>default 128</em>) – ミニバッチでのデータ数</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>default True</em>) – 学習データをシャッフルしてミニバッチ学習させるかを設定</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="eagpytorch.Regressor.Exact">
+<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Regressor.</code><code class="sig-name descname">Exact</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">eagpytorch._base_ExactGP.RunExactGP</span></code></p>
+<p>ExactGPModelの実行クラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'RBFKernel'</span></code>) – <p>使用するカーネル関数を指定する。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'CosineKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'LinearKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'MaternKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'PeriodicKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RBFKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RQKernel'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'SpectralMixtureKernel'</span></code></p></li>
+</ul>
+<p>基本はstrで指定されることを想定しているものの、 <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>
+を用いた自作のカーネル関数を入力することも可能</p>
+</p></li>
+<li><p><strong>likelihood</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>) – <p>likelihoodとして使用するクラス名が指定される。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GL'</span></code> : likelihoodにガウス分布を仮定したガウス過程を行う場合</p></li>
+</ul>
+</p></li>
+<li><p><strong>optimizer</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code>) – <p>optimizerとして使用するクラス名が指定される。下記から選択する。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'sgd'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'RMSprop'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adadelta'</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adagrad'</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>mll</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'ExactMarginalLogLikelihood'</span></code>) – <p>確率分布の周辺化の方法のクラス名が指定される。</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'ExactMarginalLogLikelihood'</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>ard_option</strong> (<em>bool</em><em>, </em><em>default True</em>) – <p>ARDカーネルを利用するかが指定される</p>
+<p>もし <a class="reference internal" href="#eagpytorch.Regressor.Exact.kernel_coeff" title="eagpytorch.Regressor.Exact.kernel_coeff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kernel_coeff</span></code></a> を利用する場合 <cite>ard_option=True</cite> を選択する</p>
+</p></li>
+<li><p><strong>ker_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – カーネル関数に渡す設定</p></li>
+<li><p><strong>mll_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – mllに渡す設定</p></li>
+<li><p><strong>opt_conf</strong> (<em>dict</em><em>, </em><em>default dict</em><em>(</em><em>)</em>) – optimizerに渡す設定</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>default None</em>) – seedの固定</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>学習用メソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>int</em>) – エポック数</p></li>
+<li><p><strong>test_x</strong> (<em>np.ndarray</em><em> or </em><em>torch.tensor</em><em>, </em><em>default None</em>) – 説明変数のテストデータ</p></li>
+<li><p><strong>test_y</strong> (<em>np.ndarray</em><em> or </em><em>torch.tensor</em><em>, </em><em>default None</em>) – <p>目的変数のテストデータ</p>
+<p>もし test_x, test_y を設定している場合エポックごとにテストデータに対するlossも表示されるように設定される</p>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>default True</em>) – 表示形式</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.kernel_coeff">
+<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.kernel_coeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>kernelの係数を出力するメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><strong>output_dict</strong> – カーネル関数の係数</p>
+<p><cite>ard_option=True</cite> の場合、 $Theta$ が各々の説明変数ごとに重みを変えて更新され、出力される</p>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>RBFKernelの場合、各説明変数の重要度 $eta$ は出力される <cite>‘base_kernel.raw_lengthscale’</cite>
+の逆数の2乗に対応する</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>モデルのloadメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – モデルの保存先のパスとファイル名</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.plot_kernel">
+<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.plot_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>カーネル関数のプロット</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">gpytorch.kernels</span></code>, default None) – 使用するカーネル関数を指定する</p></li>
+<li><p><strong>plot_range</strong> (<em>tuple</em><em>, </em><em>default None</em>) – プロットする幅</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – カーネル関数に渡す設定</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>予測用メソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 入力説明変数</p></li>
+<li><p><strong>cl</strong> (<em>float default 0.6827</em><em>(</em><em>1sigma</em><em>)</em>) – 信頼区間</p></li>
+<li><p><strong>sample_num</strong> (<em>int default None</em>) – yのサンプル数</p></li>
+<li><p><strong>sample_f_num</strong> (<em>int default None</em>) – fのサンプル数</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
+<ul class="simple">
+<li><p>output.mean : 予測された目的変数の平均値</p></li>
+<li><p>output.upper : 予測された目的変数の信頼区間の上限</p></li>
+<li><p>output.lower : 予測された目的変数の信頼区間の下限</p></li>
+<li><p>output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</p></li>
+<li><p>output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>モデルのsaveメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – モデルの保存先のパスとファイル名</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="eagpytorch.Regressor.Exact.set_model">
+<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Regressor/_Exact.html#Exact.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Regressor.Exact.set_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>使用するモデルのインスタンスを立てるメソッド</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 学習用データセットの説明変数</p></li>
+<li><p><strong>train_y</strong> (<em>np.array</em><em> or </em><em>torch.tensor</em>) – 学習用データセットの目的変数</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – 学習率</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="eagpytorch.Classifier.html" class="btn btn-neutral float-left" title="eagpytorch.Classifier package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Hirotaka Kato, Naofumi Emoto and Yuya Kaneta
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
