@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eagpytorch.Classifier._Exact &mdash; eaGPyTorch  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> eaGPyTorch
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../eagpytorch.html">eagpytorch package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">eaGPyTorch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>eagpytorch.Classifier._Exact</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for eagpytorch.Classifier._Exact</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Exact&quot;</span>
+<span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">RunExactGP</span>
+<span class="kn">from</span> <span class="nn">.._const</span> <span class="kn">import</span> <span class="n">regs</span>
+
+
+<div class="viewcode-block" id="Exact"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact">[docs]</a><span class="k">class</span> <span class="nc">Exact</span><span class="p">(</span><span class="n">RunExactGP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;ExactGPModelの実行クラス</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kernel : str or :obj:`gpytorch.kernels`, default :obj:`&#39;RBFKernel&#39;`</span>
+<span class="sd">        使用するカーネル関数を指定する。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;CosineKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;LinearKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;MaternKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;PeriodicKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;RBFKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;RQKernel&#39;`</span>
+<span class="sd">        - :obj:`&#39;SpectralMixtureKernel&#39;`</span>
+
+<span class="sd">        基本はstrで指定されることを想定しているものの、 :obj:`gpytorch.kernels`</span>
+<span class="sd">        を用いた自作のカーネル関数を入力することも可能</span>
+<span class="sd">    likelihood : str, default :obj:`&#39;GaussianLikelihood&#39;`</span>
+<span class="sd">        likelihoodとして使用するクラス名が指定される。</span>
+
+<span class="sd">        - :obj:`&#39;GaussianLikelihood&#39;`, :obj:`&#39;GL&#39;` : likelihoodにガウス分布を仮定したガウス過程を行う場合</span>
+
+<span class="sd">    optimizer : str, default :obj:`&#39;Adam&#39;`</span>
+<span class="sd">        optimizerとして使用するクラス名が指定される。下記から選択する。</span>
+
+<span class="sd">        - :obj:`&#39;Adam&#39;`</span>
+<span class="sd">        - :obj:`&#39;sgd&#39;`</span>
+<span class="sd">        - :obj:`&#39;RMSprop&#39;`</span>
+<span class="sd">        - :obj:`&#39;Adadelta&#39;`</span>
+<span class="sd">        - :obj:`&#39;Adagrad&#39;`</span>
+
+<span class="sd">    mll : str, default :obj:`&#39;ExactMarginalLogLikelihood&#39;`</span>
+<span class="sd">        確率分布の周辺化の方法のクラス名が指定される。</span>
+
+<span class="sd">        - :obj:`&#39;ExactMarginalLogLikelihood&#39;`</span>
+
+<span class="sd">    ard_option : bool, default True</span>
+<span class="sd">        ARDカーネルを利用するかが指定される</span>
+
+<span class="sd">        もし :obj:`kernel_coeff` を利用する場合 `ard_option=True` を選択する</span>
+<span class="sd">    ker_conf : dict, default dict()</span>
+<span class="sd">        カーネル関数に渡す設定</span>
+<span class="sd">    mll_conf : dict, default dict()</span>
+<span class="sd">        mllに渡す設定</span>
+<span class="sd">    opt_conf : dict, default dict()</span>
+<span class="sd">        optimizerに渡す設定</span>
+<span class="sd">    random_state : int, default None</span>
+<span class="sd">        seedの固定</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;likelihood&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Classifierに</span><span class="si">{</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;likelihood&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">は使えない&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Exactでは分類問題を解けない&quot;</span><span class="p">)</span>
+            <span class="c1"># super(Exact, self).__init__(*args, **kwargs)</span>
+
+<div class="viewcode-block" id="Exact.set_model"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.set_model">[docs]</a>    <span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.fit"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.predict"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;予測用メソッド</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : np.array or torch.tensor</span>
+<span class="sd">            入力説明変数</span>
+<span class="sd">        cl : float default 0.6827(1sigma)</span>
+<span class="sd">            信頼区間</span>
+<span class="sd">        sample_num : int default None</span>
+<span class="sd">            yのサンプル数</span>
+<span class="sd">        sample_f_num : int default None</span>
+<span class="sd">            fのサンプル数</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        output : object</span>
+<span class="sd">            予測された目的変数のオブジェクト。下記の属性が用意されている。</span>
+
+<span class="sd">            - output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</span>
+<span class="sd">            - output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</span>
+<span class="sd">            - output.probs : 2値分類の予測確率。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.save"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.load"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.kernel_coeff"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.kernel_coeff">[docs]</a>    <span class="k">def</span> <span class="nf">kernel_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">kernel_coeff</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exact.plot_kernel"><a class="viewcode-back" href="../../../eagpytorch.Classifier.html#eagpytorch.Classifier.Exact.plot_kernel">[docs]</a>    <span class="k">def</span> <span class="nf">plot_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot_kernel</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Hirotaka Kato, Naofumi Emoto and Yuya Kaneta
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
