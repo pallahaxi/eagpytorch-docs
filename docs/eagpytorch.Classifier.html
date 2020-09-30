@@ -25,6 +25,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -162,13 +163,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="eagpytorch-classifier-package">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="eagpytorch-classifier-package">
 <h1>eagpytorch.Classifier package<a class="headerlink" href="#eagpytorch-classifier-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-eagpytorch.Classifier">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-eagpytorch.Classifier" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="eagpytorch.Classifier.Approximate">
-<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Classifier.</code><code class="sig-name descname">Approximate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Classifier.</code><code class="sig-name descname">Approximate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">inducing_points_num</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">'RBFKernel'</span></em>, <em class="sig-param"><span class="n">likelihood</span><span class="o">=</span><span class="default_value">'BernoulliLikelihood'</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="o">=</span><span class="default_value">'Adam'</span></em>, <em class="sig-param"><span class="n">mll</span><span class="o">=</span><span class="default_value">'VariationalELBO'</span></em>, <em class="sig-param"><span class="n">ard_option</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ker_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">mll_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">opt_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">eagpytorch._base_ApproximateGP.RunApproximateGP</span></code></p>
 <p>ApproximateGPModelの実行クラス</p>
 <dl class="field-list simple">
@@ -193,7 +218,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </p></li>
 <li><p><strong>likelihood</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>) – <p>likelihoodとして使用するクラス名が指定される。</p>
 <ul>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'BernoulliLikelihood'</span></code> : likelihoodにベルヌーイ分布を仮定した二値分類ガウス過程モデルを行う場合</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'BernoulliLikelihood'</span></code> : likelihoodにベルヌーイ分布を仮定した二値分類ガウス過程モデルを行う場合</p></li>
 </ul>
 </p></li>
 <li><p><strong>optimizer</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code>) – <p>optimizerとして使用するクラス名が指定される。下記から選択する。</p>
@@ -224,7 +249,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </dl>
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">test_dataloader</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>学習用メソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -241,7 +266,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.kernel_coeff">
-<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.kernel_coeff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.kernel_coeff" title="Permalink to this definition">¶</a></dt>
 <dd><p>kernelの係数を出力するメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -262,7 +287,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>モデルのloadメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -273,7 +298,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.plot_kernel">
-<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.plot_kernel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">plot_range</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.plot_kernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>カーネル関数のプロット</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -288,7 +313,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">cl</span><span class="o">=</span><span class="default_value">0.6827</span></em>, <em class="sig-param"><span class="n">sample_num</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sample_f_num</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>予測用メソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -300,7 +325,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
+<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
 <ul class="simple">
 <li><p>output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</p></li>
 <li><p>output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</p></li>
@@ -316,7 +341,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>モデルのsaveメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -327,7 +352,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Approximate.set_model">
-<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.set_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_x</span></em>, <em class="sig-param"><span class="n">train_y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">lr</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Approximate.html#Approximate.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Approximate.set_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>使用するモデルのインスタンスを立てるメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -346,7 +371,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py class">
 <dt id="eagpytorch.Classifier.Exact">
-<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Classifier.</code><code class="sig-name descname">Exact</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">eagpytorch.Classifier.</code><code class="sig-name descname">Exact</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">'RBFKernel'</span></em>, <em class="sig-param"><span class="n">likelihood</span><span class="o">=</span><span class="default_value">'GaussianLikelihood'</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="o">=</span><span class="default_value">'Adam'</span></em>, <em class="sig-param"><span class="n">mll</span><span class="o">=</span><span class="default_value">'ExactMarginalLogLikelihood'</span></em>, <em class="sig-param"><span class="n">ard_option</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ker_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">opt_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">mll_conf</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">eagpytorch._base_ExactGP.RunExactGP</span></code></p>
 <p>ExactGPModelの実行クラス</p>
 <dl class="field-list simple">
@@ -367,7 +392,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </p></li>
 <li><p><strong>likelihood</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>) – <p>likelihoodとして使用するクラス名が指定される。</p>
 <ul>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GL'</span></code> : likelihoodにガウス分布を仮定したガウス過程を行う場合</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">'GaussianLikelihood'</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">'GL'</span></code> : likelihoodにガウス分布を仮定したガウス過程を行う場合</p></li>
 </ul>
 </p></li>
 <li><p><strong>optimizer</strong> (str, default <code class="xref py py-obj docutils literal notranslate"><span class="pre">'Adam'</span></code>) – <p>optimizerとして使用するクラス名が指定される。下記から選択する。</p>
@@ -396,7 +421,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </dl>
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">test_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">test_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>学習用メソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -414,7 +439,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.kernel_coeff">
-<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.kernel_coeff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">kernel_coeff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.kernel_coeff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.kernel_coeff" title="Permalink to this definition">¶</a></dt>
 <dd><p>kernelの係数を出力するメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -435,7 +460,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>モデルのloadメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -446,7 +471,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.plot_kernel">
-<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.plot_kernel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_kernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">plot_range</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.plot_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.plot_kernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>カーネル関数のプロット</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -461,7 +486,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">cl</span><span class="o">=</span><span class="default_value">0.6827</span></em>, <em class="sig-param"><span class="n">sample_num</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sample_f_num</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>予測用メソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -473,7 +498,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
+<dd class="field-even"><p><p><strong>output</strong> – 予測された目的変数のオブジェクト。下記の属性が用意されている。</p>
 <ul class="simple">
 <li><p>output.samples : 入力説明変数に対する予測値yのサンプル(sample_num個サンプルされる)</p></li>
 <li><p>output.samples_f : 入力説明変数に対する予測関数fのサンプル(sample_f_num個サンプルされる)</p></li>
@@ -489,7 +514,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>モデルのsaveメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -500,7 +525,7 @@ inducing_points_num の積が補助変数の個数として設定される</p
 
 <dl class="py method">
 <dt id="eagpytorch.Classifier.Exact.set_model">
-<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.set_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_x</span></em>, <em class="sig-param"><span class="n">train_y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">lr</span><span class="o">=</span><span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/eagpytorch/Classifier/_Exact.html#Exact.set_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#eagpytorch.Classifier.Exact.set_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>使用するモデルのインスタンスを立てるメソッド</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
